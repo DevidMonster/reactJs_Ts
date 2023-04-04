@@ -13,7 +13,7 @@ interface IProductKey extends IProducts {
 
 function ProductsManager(props: IProps) {
     const { data, onRemove } = props
-    const [currentData, setCurrentData] = useState<IProducts[]>(data)
+    const [currentData, setCurrentData] = useState<IProductKey[]>(data)
 
     const columns = [
         {

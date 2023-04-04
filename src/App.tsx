@@ -22,7 +22,6 @@ function App() {
 
   const fetchAPI = async (): Promise<void> => {
     const dataResponse = await productRequest.getAllProduct()
-    console.log(1);
     setData(dataResponse)
   }
 
@@ -39,11 +38,13 @@ function App() {
   const onAdd = async (item: IProducts): Promise<void> => {
     await productRequest.postProduct(item)
     fetchAPI()
+    navigate("/admin/products")
   }
 
   const onUpdate = async (id: string, item: IProducts): Promise<void> => {
     await productRequest.patchProduct(id, item)
     fetchAPI()
+    navigate("/admin/products")
   }
 
   const onHandSignUp = (user: IUserSignUp) => {

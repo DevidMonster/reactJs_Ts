@@ -1,7 +1,12 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { IProducts } from "../../types/products";
-import { Button, Form, Input, InputNumber } from 'antd';
+import { Button, Form, Input, InputNumber, Select } from 'antd';
 import TextArea from "antd/es/input/TextArea";
+import { useEffect, useState } from "react";
+import categoryRequest from "../../api/httpRequest/category";
+import { ICategory } from "../../types/category";
+
+const { Option } = Select;
 
 interface IProps {
     onAdd(product: IProducts): void;
@@ -16,14 +21,22 @@ interface IFormInput {
 
 function AddProduct(props: IProps) {
     const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>()
+    const [categories, setCategories] = useState<ICategory[]>([])
 
-    const handleAddProduct: SubmitHandler<IFormInput> = async (data: IProducts): Promise<void> => {
-        console.log(data, errors);
 
-        props.onAdd(data)
+    // const handleAddProduct: SubmitHandler<IFormInput> = async (data: IProducts): Promise<void> => {
+    //     console.log(data, errors);
+
+    //     props.onAdd(data)
+    // }
+    const getCate = async (): Promise<void> => {
+        const res = await categoryRequest.getAllCategory()
+        setCategories(res)
     }
-
-    const onFinish: SubmitHandler<IFormInput> = async (values: IProducts): Promise<void> => {
+    useEffect(() => {
+        getCate()
+    }, [])
+    const onFinish = async (values: IProducts): Promise<void> => {
         props.onAdd(values)
         console.log('Success:', values);
     };
@@ -87,7 +100,19 @@ function AddProduct(props: IProps) {
                 <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
                     <Checkbox>Remember me</Checkbox>
                 </Form.Item> */}
-
+            <Form.Item
+                name="categories"
+                label="Select[category]"
+                rules={[{ required: true, message: 'Please select catefories', type: 'array' }]}
+            >
+            <Select mode="multiple" placeholder="Please select categories">
+                {
+                    categories?.map(cate => (
+                        <Option value={cate._id}>{cate.name}</Option>
+                    ))
+                }
+            </Select>
+            </Form.Item>
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                 <Button type="primary" htmlType="submit">
                     Submit
