@@ -81,7 +81,8 @@ function ProductsManager(props: IProps) {
     }, [data])
 
     return (
-        <div className="dashboard">
+        <div className="products">
+            <h1>Products Manager</h1>
             <Input.Search 
                 allowClear
                 enterButton="Search"
