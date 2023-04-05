@@ -1,4 +1,4 @@
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { IProducts } from "../../types/products";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -22,34 +22,39 @@ interface IFormInput {
 
 
 function UpdateProduct(props: IProps) {
-    const { register, reset, handleSubmit, formState: { errors } } = useForm<IFormInput>()
-    const [currentCate, setCurrentCate] = useState<ICategory[]>([])
-    const [categories, setCategories] = useState<ICategory[]>([])
-    const [currentData, setCurrentData] = useState<IProducts>({})
-
+    const { register, formState: { errors } } = useForm<IFormInput>()
     const { id } = useParams()
+    const [product, setProduct] = useState<IProducts>(props.products.find(item => item._id == id)!)
+    const [categories, setCategories] = useState<ICategory[]>([])
 
-    const getCate = async (): Promise<void> => {
+
+    const setState = async (products: IProducts): Promise<void> => {
         const res = await categoryRequest.getAllCategory()
-        const prdId = res.filter(res => {
-            for(const prd of res.products) {
-                if(prd?._id == id) return res
-            }
-        })
-        console.log(prdId);
-        
-        setCurrentCate(prdId)
         setCategories(res)
+        setProduct(products)
     }
-    
+
     useEffect(() => {
         const currentProduct = props.products.find(item => item._id == id)
-        setCurrentData(currentProduct!)
-        getCate()
-    }, [props,id])
+        setState(currentProduct!)
+    }, [props, id]);
 
-    console.log(currentData);
-    
+    const [form] = Form.useForm()
+
+    const setFields = () => {
+        console.log(product);
+
+        form.setFieldsValue({
+            name: product?.name,
+            price: product?.price,
+            description: product?.description,
+            categories: product?.categories.map((cate) => cate?._id)
+        })
+    }
+    useEffect(() => {
+        setFields()
+    }, [product])
+
     const onFinish = async (values: IProducts): Promise<void> => {
         props.onUpdate(id!, values)
         console.log('Success:', values);
@@ -74,14 +79,11 @@ function UpdateProduct(props: IProps) {
     console.log(errors);
     return (
         <Form
+            form={form}
             name="basic"
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             style={{ maxWidth: 600, margin: '0 auto' }}
-            initialValues={{ 
-                name: currentData?.name,
-                categories: currentCate
-             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -126,13 +128,13 @@ function UpdateProduct(props: IProps) {
                 label="Select[category]"
                 rules={[{ required: true, message: 'Please select catefories', type: 'array' }]}
             >
-            <Select mode="multiple" placeholder="Please select categories">
-                {
-                    categories?.map(cate => (
-                        <Option value={cate._id}>{cate.name}</Option>
-                    ))
-                }
-            </Select>
+                <Select mode="multiple" placeholder="Please select categories">
+                    {
+                        categories?.map(cate => (
+                            <Option key={cate._id} value={cate._id}>{cate.name}</Option>
+                        ))
+                    }
+                </Select>
             </Form.Item>
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                 <Button type="primary" htmlType="submit">

@@ -105,13 +105,13 @@ function AddProduct(props: IProps) {
                 label="Select[category]"
                 rules={[{ required: true, message: 'Please select catefories', type: 'array' }]}
             >
-            <Select mode="multiple" placeholder="Please select categories">
-                {
-                    categories?.map(cate => (
-                        <Option value={cate._id}>{cate.name}</Option>
-                    ))
-                }
-            </Select>
+                <Select mode="multiple" placeholder="Please select categories">
+                    {
+                        categories?.map(cate => (
+                            <Option key={cate._id} value={cate._id}>{cate.name}</Option>
+                        ))
+                    }
+                </Select>
             </Form.Item>
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                 <Button type="primary" htmlType="submit">
