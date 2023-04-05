@@ -2,10 +2,11 @@ import { useForm } from "react-hook-form";
 import { IProducts } from "../../types/products";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Form, Input, InputNumber, Select } from 'antd';
+import { Button, Form, Image, Input, InputNumber, Select, Upload, message } from 'antd';
 import TextArea from "antd/es/input/TextArea";
 import { ICategory } from "../../types/category";
 import categoryRequest from "../../api/httpRequest/category";
+import { UploadOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 interface IProps {
@@ -14,10 +15,11 @@ interface IProps {
 }
 
 interface IFormInput {
-    _id: string;
-    name: string;
-    price: number;
-    description?: string;
+    _id: string,
+    name: string,
+    price: number,
+    image: string,
+    description?: string,
 }
 
 
@@ -27,6 +29,24 @@ function UpdateProduct(props: IProps) {
     const [product, setProduct] = useState<IProducts>(props.products.find(item => item._id == id)!)
     const [categories, setCategories] = useState<ICategory[]>([])
 
+
+    const dummyRequest = ({ onSuccess }: any) => {
+        setTimeout(() => {
+          onSuccess("ok");
+        }, 0);
+      };
+    const handleBeforeUpload = (file: any) => {
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+        if (!isJpgOrPng) {
+          message.error('Bạn chỉ có thể tải lên file JPG/PNG!');
+        }
+        const isLt2M = file.size / 1024 / 1024 < 10;
+        if (!isLt2M) {
+          message.error('Kích thước hình ảnh không được vượt quá 10MB!');
+        }
+        
+        return isJpgOrPng && isLt2M;
+    };
 
     const setState = async (products: IProducts): Promise<void> => {
         const res = await categoryRequest.getAllCategory()
@@ -56,8 +76,11 @@ function UpdateProduct(props: IProps) {
     }, [product])
 
     const onFinish = async (values: IProducts): Promise<void> => {
-        props.onUpdate(id!, values)
+        let url = product.image
         console.log('Success:', values);
+
+        if(values.image !== undefined) url = values.image[0].thumbUrl
+        props.onUpdate(id!, {...values, image: url})
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -105,6 +128,29 @@ function UpdateProduct(props: IProps) {
             >
                 <InputNumber />
 
+            </Form.Item>
+            <Form.Item 
+                label="Image"  
+                valuePropName="fileList"
+                {...register('image')}
+                getValueFromEvent={(e) => {
+                    if (Array.isArray(e)) {
+                      return e;
+                    }
+                    return e && e.fileList;
+                }}
+            >
+                    <Upload
+                       name="image" beforeUpload={handleBeforeUpload} customRequest={dummyRequest} listType="picture"
+                    >
+                         <Button icon={<UploadOutlined />}>+ Upload</Button>
+                    </Upload>
+                
+            </Form.Item>
+            <Form.Item
+                label="Current Image"
+            >
+                <Image src={product?.image} alt={product?.name}/>
             </Form.Item>
             <Form.Item
                 label="Description"

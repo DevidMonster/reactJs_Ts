@@ -1,4 +1,4 @@
-import { Table, Space, Button, Tag } from "antd";
+import { Table, Space, Button, Tag, Image, Input } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IProducts } from "../../types/products";
@@ -14,17 +14,26 @@ interface IProductKey extends IProducts {
 function ProductsManager(props: IProps) {
     const { data, onRemove } = props
     const [currentData, setCurrentData] = useState<IProductKey[]>(data)
+    const [searchValue, setSearchValue] = useState<string>("")
 
     const columns = [
         {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
+            sorter: (a: any, b: any) => a.name.length - b.name.length
+        },
+        {
+            title: 'Image',
+            dataIndex: 'image',
+            key: 'image',
+            render: (imageUrl: string) => <Image src={imageUrl} alt="image"/>
         },
         {
             title: 'Price',
             dataIndex: 'price',
             key: 'price',
+            sorter: (a: any, b: any) => a.price - b.price,
         },
         {
             title: 'Description',
@@ -55,6 +64,14 @@ function ProductsManager(props: IProps) {
         },
     ];
 
+    const handleSearch = (e: any) => {
+        setSearchValue(e.target.value);
+        const filterSearch = data.filter(item => {
+            return item.name.toLowerCase().includes(e.target.value.toLowerCase())
+        })
+        setCurrentData(filterSearch);
+    }
+
     useEffect(() => {
         const newArr: IProductKey[] = data?.map(product => {
             let item: IProductKey = { ...product, key: product._id }
@@ -65,6 +82,15 @@ function ProductsManager(props: IProps) {
 
     return (
         <div className="dashboard">
+            <Input.Search 
+                allowClear
+                enterButton="Search"
+                size="large" 
+                placeholder="Search Product by Name" 
+                value={searchValue} 
+                onChange={handleSearch}
+                style={{ margin: '20px 0'}}
+            />
             <Table dataSource={currentData} columns={columns} />
             {/* <table>
                 <thead>

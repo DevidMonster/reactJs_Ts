@@ -7,7 +7,7 @@ import {
   SkinOutlined,
 } from '@ant-design/icons';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
-import { Layout, Menu, theme, Image, Avatar } from 'antd';
+import { Layout, Menu, theme, Image, Avatar, Button } from 'antd';
 
 const { Header, Sider, Content } = Layout;
 
@@ -53,8 +53,13 @@ const AdminLayout: React.FC = () => {
     navigate('/login')
   }
 
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    navigate("/login")
+  }
+
   return (
-    <Layout style={{ height: "100%" }}>
+    <Layout style={{ minHeight: "100vh" }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo" >
           <Image src='https://gw.alipayobjects.com/zos/bmw-prod/1c363c0b-17c6-4b00-881a-bc774df1ebeb.svg' />
@@ -73,6 +78,7 @@ const AdminLayout: React.FC = () => {
             onClick: () => setCollapsed(!collapsed),
           })}
           <div>
+            <Button onClick={handleLogout}>Logout</Button>
             <Avatar src="https://gw.alipayobjects.com/zos/bmw-prod/1c363c0b-17c6-4b00-881a-bc774df1ebeb.svg" size={50} />
           </div>
         </Header>

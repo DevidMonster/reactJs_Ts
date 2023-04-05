@@ -30,19 +30,25 @@ function App() {
   }, [])
 
   const removeItem = async (id: string): Promise<void> => {
-    await productRequest.deleteProduct(id)
-    navigate("/admin/products")
-    fetchAPI()
+    const verifier = confirm("Are you sure you want to delete this product?")
+    if(verifier) {
+      await productRequest.deleteProduct(id)
+      alert("Delete product successfully")
+      navigate("/admin/products")
+      fetchAPI()
+    }
   }
 
   const onAdd = async (item: IProducts): Promise<void> => {
     await productRequest.postProduct(item)
+    alert("Add product successfully")
     fetchAPI()
     navigate("/admin/products")
   }
 
   const onUpdate = async (id: string, item: IProducts): Promise<void> => {
     await productRequest.patchProduct(id, item)
+    alert("Update product successfully")
     fetchAPI()
     navigate("/admin/products")
   }
@@ -73,7 +79,7 @@ function App() {
   }
 
   return (
-    <div className="App" style={{ height: "100%" }}>
+    <div className="App" >
       <Routes>
         <Route path='/register' element={<Register signUp={onHandSignUp} />} />
         <Route path='/login' element={<Login login={onHandLogin} />} />

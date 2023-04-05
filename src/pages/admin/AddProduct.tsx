@@ -1,10 +1,13 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { IProducts } from "../../types/products";
+import { Upload, message } from 'antd';
+import ImgCrop from 'antd-img-crop';
 import { Button, Form, Input, InputNumber, Select } from 'antd';
 import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
 import categoryRequest from "../../api/httpRequest/category";
 import { ICategory } from "../../types/category";
+import { UploadOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -13,22 +16,35 @@ interface IProps {
 }
 
 interface IFormInput {
-    _id: string;
-    name: string;
-    price: number;
-    description?: string;
+    _id: string,
+    name: string,
+    price: number,
+    image: string,
+    description?: string,
 }
 
 function AddProduct(props: IProps) {
     const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>()
     const [categories, setCategories] = useState<ICategory[]>([])
 
+    const dummyRequest = ({ onSuccess }: any) => {
+        setTimeout(() => {
+          onSuccess("ok");
+        }, 0);
+      };
+    const handleBeforeUpload = (file: any) => {
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+        if (!isJpgOrPng) {
+          message.error('Bạn chỉ có thể tải lên file JPG/PNG!');
+        }
+        const isLt2M = file.size / 1024 / 1024 < 10;
+        if (!isLt2M) {
+          message.error('Kích thước hình ảnh không được vượt quá 10MB!');
+        }
+        
+        return isJpgOrPng && isLt2M;
+    };
 
-    // const handleAddProduct: SubmitHandler<IFormInput> = async (data: IProducts): Promise<void> => {
-    //     console.log(data, errors);
-
-    //     props.onAdd(data)
-    // }
     const getCate = async (): Promise<void> => {
         const res = await categoryRequest.getAllCategory()
         setCategories(res)
@@ -36,8 +52,10 @@ function AddProduct(props: IProps) {
     useEffect(() => {
         getCate()
     }, [])
+    
     const onFinish = async (values: IProducts): Promise<void> => {
-        props.onAdd(values)
+        const url = values.image
+        props.onAdd({...values, image: url[0].thumbUrl})
         console.log('Success:', values);
     };
 
@@ -82,6 +100,27 @@ function AddProduct(props: IProps) {
             >
                 <InputNumber />
 
+            </Form.Item>
+            <Form.Item 
+                label="Image"  
+                valuePropName="fileList"
+                {...register('image')}
+                rules={[{ required: true, message: `bạn phải chọn ảnh` }]}
+                getValueFromEvent={(e) => {
+                    if (Array.isArray(e)) {
+                      return e;
+                    }
+                    return e && e.fileList;
+                }}
+                validateStatus={errors.image ? "error" : ""}
+            >
+               
+                    <Upload
+                       name="image" beforeUpload={handleBeforeUpload} customRequest={dummyRequest} listType="picture"
+                    >
+                         <Button icon={<UploadOutlined />}>+ Upload</Button>
+                    </Upload>
+                
             </Form.Item>
             <Form.Item
                 label="Description"
