@@ -74,37 +74,13 @@ function CategoryManager(props: IProps) {
                 onChange={handleSearch}
                 style={{ margin: '20px 0' }}
             />
-            <Table dataSource={currentData} columns={columns} />
-            {/* <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Description</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data?.map(item => (
-                        <tr key={item.id}>
-                            <th>{item.id}</th>
-                            <td>{item.name}</td>
-                            <td>{item.price}</td>
-                            <td>{item.description}</td>
-                            <td>
-                                <button onClick={() => onRemove(item.id)}>Delete</button>
-                                <button>
-                                    <Link to={"/admin/edit_product/" + item.id}>Edit</Link>
-                                </button>
-                                <button>
-                                    <Link to={"/products/" + item.id}>View</Link>
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table> */}
+            <Table 
+                pagination={{
+                    pageSize: 10
+                }}
+                dataSource={currentData} 
+                columns={columns} 
+            />
         </div>
     );
 }

@@ -51,6 +51,7 @@ const Register = (props: IProps) => {
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
+                layout="vertical"
                 validateMessages={validateMessages}
             >
                 <Form.Item
@@ -92,7 +93,7 @@ const Register = (props: IProps) => {
                     <Checkbox>Remember me</Checkbox>
                 </Form.Item> */}
 
-                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                <Form.Item >
                     <Button type="primary" htmlType="submit">
                         Submit
                     </Button>

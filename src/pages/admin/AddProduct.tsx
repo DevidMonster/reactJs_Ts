@@ -84,6 +84,7 @@ function AddProduct(props: IProps) {
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
+                layout="vertical"
                 validateMessages={validateMessages}
             >
                 <Form.Item
@@ -92,15 +93,15 @@ function AddProduct(props: IProps) {
                     rules={[{ required: true }]}
                     validateStatus={errors.name ? "error" : ""}
                 >
-                    <Input />
+                    <Input placeholder="fill name"/>
                 </Form.Item>
                 <Form.Item
                     label="Price"
                     {...register('price')}
-                    rules={[{ type: 'number', min: 0, required: true, message: `bạn phải nhập price` }]}
+                    rules={[{ type: 'number', required: true, message: `bạn phải nhập price` }, { type: "number", min: 0, message: "Giá tiền không hợp lệ"}]}
                     validateStatus={errors.price ? "error" : ""}
                 >
-                    <InputNumber />
+                    <InputNumber placeholder="fill price"/>
 
                 </Form.Item>
                 <Form.Item
@@ -163,8 +164,8 @@ function AddProduct(props: IProps) {
                         }
                     </Select>
                 </Form.Item>
-                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                    <Button type="primary" htmlType="submit">
+                <Form.Item >
+                    <Button type="primary" block htmlType="submit">
                         Submit
                     </Button>
                 </Form.Item>

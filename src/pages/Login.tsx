@@ -1,6 +1,7 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { IUserLogin } from '../types/user'
 import { Button, Form, Input } from 'antd';
+import Sider from "antd/es/layout/Sider";
 
 interface IProps {
     login(value: IUserLogin): void
@@ -49,6 +50,7 @@ const Login = (props: IProps) => {
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
+                layout="vertical"
                 validateMessages={validateMessages}
             >
                 <Form.Item
@@ -73,7 +75,7 @@ const Login = (props: IProps) => {
                     <Checkbox>Remember me</Checkbox>
                 </Form.Item> */}
 
-                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                <Form.Item >
                     <Button type="primary" htmlType="submit">
                         Submit
                     </Button>

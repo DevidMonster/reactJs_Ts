@@ -20,8 +20,8 @@ function ClientLayout() {
                 )}
                 <nav>
                     <ul style={{ display: 'flex', gap: "10px", justifyContent: 'center', listStyle: "none" }}>
-                        <li><Link to='/'>Home</Link></li>
-                        <li><Link to='/products'>Products</Link></li>
+                        <li><Button type="link"><Link to='/'>Home</Link></Button></li>
+                        <li><Button type="link"><Link to='/products'>Products</Link></Button></li>
                     </ul>
                 </nav>
             </header>

@@ -79,6 +79,7 @@ function UpdateCategory(props: IProps) {
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
+                layout="vertical"
                 validateMessages={validateMessages}
             >
                 <Form.Item
@@ -87,11 +88,11 @@ function UpdateCategory(props: IProps) {
                     rules={[{ required: true }]}
                     validateStatus={errors.name ? "error" : ""}
                 >
-                    <Input />
+                    <Input placeholder="fill name"/>
                 </Form.Item>
 
-                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                    <Button type="primary" htmlType="submit">
+                <Form.Item >
+                    <Button type="primary" block htmlType="submit">
                         Submit
                     </Button>
                 </Form.Item>
