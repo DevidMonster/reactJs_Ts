@@ -11,6 +11,7 @@ function ProductDetailPage(props: IProps) {
     return (
         <div>
             <h1>Product Detail</h1>
+            <img src={currentItem?.image} alt={currentItem?.name} />
             <h2>{currentItem?.name}</h2>
             <h3>{currentItem?.price}</h3>
             <p>{currentItem?.description}</p>

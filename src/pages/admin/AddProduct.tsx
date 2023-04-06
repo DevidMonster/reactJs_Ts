@@ -29,20 +29,21 @@ function AddProduct(props: IProps) {
 
     const dummyRequest = ({ onSuccess }: any) => {
         setTimeout(() => {
-          onSuccess("ok");
+            onSuccess("ok");
         }, 0);
-      };
+    };
+
     const handleBeforeUpload = (file: any) => {
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
         if (!isJpgOrPng) {
-          message.error('Bạn chỉ có thể tải lên file JPG/PNG!');
+            message.error('Bạn chỉ có thể tải lên file JPG/PNG!');
         }
-        const isLt2M = file.size / 1024 / 1024 < 10;
-        if (!isLt2M) {
-          message.error('Kích thước hình ảnh không được vượt quá 10MB!');
+        const isLt10M = file.size / 1024 / 1024 < 10;
+        if (!isLt10M) {
+            message.error('Kích thước hình ảnh không được vượt quá 10MB!');
         }
-        
-        return isJpgOrPng && isLt2M;
+
+        return isJpgOrPng && isLt10M;
     };
 
     const getCate = async (): Promise<void> => {
@@ -52,10 +53,10 @@ function AddProduct(props: IProps) {
     useEffect(() => {
         getCate()
     }, [])
-    
+
     const onFinish = async (values: IProducts): Promise<void> => {
         const url = values.image
-        props.onAdd({...values, image: url[0].thumbUrl})
+        props.onAdd({ ...values, image: url[0].thumbUrl })
         console.log('Success:', values);
     };
 
@@ -103,31 +104,35 @@ function AddProduct(props: IProps) {
                     <InputNumber />
 
                 </Form.Item>
-                <Form.Item 
-                    label="Image"  
+                <Form.Item
+                    label="Image"
                     valuePropName="fileList"
                     {...register('image')}
                     rules={[{ required: true, message: `bạn phải chọn ảnh` }]}
                     getValueFromEvent={(e) => {
                         if (Array.isArray(e)) {
-                        return e;
+                            return e;
                         }
                         return e && e.fileList;
                     }}
                     validateStatus={errors.image ? "error" : ""}
                 >
-                
-                        <Upload
+
+                    <Upload
                         name="image" beforeUpload={handleBeforeUpload} customRequest={dummyRequest} listType="picture"
-                        >
-                            <Button icon={<UploadOutlined />}>+ Upload</Button>
-                        </Upload>
-                    
+                    >
+                        <Button icon={<UploadOutlined />}>Upload</Button>
+                    </Upload>
+
                 </Form.Item>
                 <Form.Item
                     label="Description"
                     {...register('description')}
-                    rules={[{ required: true, message: `bạn phải nhập description` }]}
+                    rules={[{ required: true, message: `bạn phải nhập description` },
+                    {
+                        min: 32,
+                        message: "Textarea length must be at least 32 characters",
+                    },]}
                     validateStatus={errors.description ? "error" : ""}
                 >
                     <TextArea
