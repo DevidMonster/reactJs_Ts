@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { IProducts } from "../../types/products";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Form, Image, Input, InputNumber, Select, Upload, message } from 'antd';
+import { Button, Form, Image, Input, InputNumber, Select, Upload, UploadFile, UploadProps, message } from 'antd';
 import TextArea from "antd/es/input/TextArea";
 import { ICategory } from "../../types/category";
 import categoryRequest from "../../api/httpRequest/category";
@@ -29,7 +29,7 @@ function UpdateProduct(props: IProps) {
     const { id } = useParams()
     const [product, setProduct] = useState<IProducts>(props.products.find(item => item._id == id)!)
     const [categories, setCategories] = useState<ICategory[]>(props.categories)
-
+    const [fileList, setFileList] = useState<UploadFile[]>([])
 
     const dummyRequest = ({ onSuccess }: any) => {
         setTimeout(() => {
@@ -100,7 +100,8 @@ function UpdateProduct(props: IProps) {
     // const handleUpdateProduct = async (data: IProducts): Promise<void> => {
     //     props.onUpdate(id!, data)
     // }
-    console.log(errors);
+
+    const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => setFileList(newFileList);
     return (
         <div>
             <h1>Update Product</h1>
@@ -144,9 +145,14 @@ function UpdateProduct(props: IProps) {
                     }}
                 >
                     <Upload
-                        name="image" beforeUpload={handleBeforeUpload} customRequest={dummyRequest} listType="picture"
+                        name="image"
+                        beforeUpload={handleBeforeUpload}
+                        customRequest={dummyRequest}
+                        listType="picture"
+                        fileList={fileList}
+                        onChange={handleChange}
                     >
-                        <Button icon={<UploadOutlined />}>+ Upload</Button>
+                        {fileList.length === 1 ? "" : <Button icon={<UploadOutlined />}>Upload</Button>}
                     </Upload>
 
                 </Form.Item>

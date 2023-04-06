@@ -1,6 +1,6 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { IProducts } from "../../types/products";
-import { Upload, message } from 'antd';
+import { Upload, UploadFile, UploadProps, message } from 'antd';
 import ImgCrop from 'antd-img-crop';
 import { Button, Form, Input, InputNumber, Select } from 'antd';
 import TextArea from "antd/es/input/TextArea";
@@ -27,6 +27,7 @@ interface IFormInput {
 function AddProduct(props: IProps) {
     const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>()
     const [categories, setCategories] = useState<ICategory[]>(props.categories)
+    const [fileList, setFileList] = useState<UploadFile[]>([])
 
     useEffect(() => {
         setCategories(props.categories)
@@ -60,7 +61,7 @@ function AddProduct(props: IProps) {
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
-    console.log(errors);
+
     const validateMessages = {
         required: '${label} is required!',
         types: {
@@ -70,6 +71,7 @@ function AddProduct(props: IProps) {
             range: '${label} must be larger than ${min}',
         },
     };
+    const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => setFileList(newFileList);
     return (
         <div>
             <h1>Add Product</h1>
@@ -116,9 +118,14 @@ function AddProduct(props: IProps) {
                 >
 
                     <Upload
-                        name="image" beforeUpload={handleBeforeUpload} customRequest={dummyRequest} listType="picture"
+                        name="image"
+                        beforeUpload={handleBeforeUpload}
+                        customRequest={dummyRequest}
+                        listType="picture"
+                        fileList={fileList}
+                        onChange={handleChange}
                     >
-                        <Button icon={<UploadOutlined />}>Upload</Button>
+                        {fileList.length === 1 ? "" : <Button icon={<UploadOutlined />}>Upload</Button>}
                     </Upload>
 
                 </Form.Item>
