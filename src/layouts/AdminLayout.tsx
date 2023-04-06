@@ -39,6 +39,19 @@ const items = [
     key: '5',
     icon: <InboxOutlined />,
     label: 'Categories',
+    children:
+      [
+        {
+          key: '6',
+          icon: '',
+          label: <Link to="/admin/categories">Categories</Link>
+        },
+        {
+          key: '7',
+          icon: '',
+          label: <Link to="/admin/categories/add">Add Category</Link>
+        }
+      ]
   },
 ]
 

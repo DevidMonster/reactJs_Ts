@@ -1,19 +1,19 @@
 import { Table, Space, Button, Tag, Image, Input } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { IProducts } from "../../types/products";
+import { ICategory } from "../../types/category";
 
 interface IProps {
-    data: IProducts[],
-    onRemove(id: string): void
+    data: ICategory[],
+    onRemoveCate(id: string): void
 }
-interface IProductKey extends IProducts {
+interface ICategoryKey extends ICategory {
     key?: string
 }
 
-function ProductsManager(props: IProps) {
-    const { data, onRemove } = props
-    const [currentData, setCurrentData] = useState<IProductKey[]>(data)
+function CategoryManager(props: IProps) {
+    const { data, onRemoveCate } = props
+    const [currentData, setCurrentData] = useState<ICategoryKey[]>(data)
     const [searchValue, setSearchValue] = useState<string>("")
 
     const columns = [
@@ -24,29 +24,12 @@ function ProductsManager(props: IProps) {
             sorter: (a: any, b: any) => a.name.length - b.name.length
         },
         {
-            title: 'Image',
-            dataIndex: 'image',
-            key: 'image',
-            render: (imageUrl: string) => <Image src={imageUrl} alt="image" />
-        },
-        {
-            title: 'Price',
-            dataIndex: 'price',
-            key: 'price',
-            sorter: (a: any, b: any) => a.price - b.price,
-        },
-        {
-            title: 'Description',
-            dataIndex: 'description',
-            key: 'description',
-        },
-        {
-            title: 'Categories',
-            key: 'categories',
+            title: 'Products',
+            key: 'products',
             render: (_: any, record: any) => (
                 <Space size="middle">
-                    {record.categories.map((cate: any) => (
-                        <Tag>{cate.name}</Tag>
+                    {record.products.map((prd: any) => (
+                        <Tag>{prd.name}</Tag>
                     ))}
                 </Space>
             ),
@@ -56,9 +39,8 @@ function ProductsManager(props: IProps) {
             key: 'action',
             render: (_: any, record: any) => (
                 <Space size="middle">
-                    <Button danger><Link to={"/products/" + record._id}>View</Link></Button>
-                    <Button type="text" danger><Link to={"/admin/products/update/" + record._id}>Update</Link></Button>
-                    <Button type="primary" danger onClick={() => onRemove(record._id)}>Delete</Button>
+                    <Button type="text" danger><Link to={"/admin/categories/update/" + record._id}>Update</Link></Button>
+                    <Button type="primary" danger onClick={() => onRemoveCate(record._id)}>Delete</Button>
                 </Space>
             ),
         },
@@ -73,8 +55,8 @@ function ProductsManager(props: IProps) {
     }
 
     useEffect(() => {
-        const newArr: IProductKey[] = data?.map(product => {
-            let item: IProductKey = { ...product, key: product._id }
+        const newArr: ICategoryKey[] = data?.map(cate => {
+            let item: ICategoryKey = { ...cate, key: cate._id }
             return item
         })
         setCurrentData(newArr)
@@ -82,7 +64,7 @@ function ProductsManager(props: IProps) {
 
     return (
         <div className="products">
-            <h1>Products Manager</h1>
+            <h1>Categories Manager</h1>
             <Input.Search
                 allowClear
                 enterButton="Search"
@@ -127,4 +109,4 @@ function ProductsManager(props: IProps) {
     );
 }
 
-export default ProductsManager;
+export default CategoryManager;

@@ -1,7 +1,7 @@
 function DashBoard() {
     return (
         <div className="dashboard">
-            Welcome to your DashBoard
+            <h1>Welcome to your DashBoard</h1>
         </div>
     );
 }

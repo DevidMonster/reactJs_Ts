@@ -11,6 +11,7 @@ import { UploadOutlined } from "@ant-design/icons";
 const { Option } = Select;
 interface IProps {
     products: IProducts[],
+    categories: ICategory[],
     onUpdate(id: string, product: IProducts): void;
 }
 
@@ -27,7 +28,7 @@ function UpdateProduct(props: IProps) {
     const { register, formState: { errors } } = useForm<IFormInput>()
     const { id } = useParams()
     const [product, setProduct] = useState<IProducts>(props.products.find(item => item._id == id)!)
-    const [categories, setCategories] = useState<ICategory[]>([])
+    const [categories, setCategories] = useState<ICategory[]>(props.categories)
 
 
     const dummyRequest = ({ onSuccess }: any) => {
@@ -49,8 +50,7 @@ function UpdateProduct(props: IProps) {
     };
 
     const setState = async (products: IProducts): Promise<void> => {
-        const res = await categoryRequest.getAllCategory()
-        setCategories(res)
+        setCategories(props.categories)
         setProduct(products)
     }
 

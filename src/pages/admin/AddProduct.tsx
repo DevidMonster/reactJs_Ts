@@ -12,6 +12,7 @@ import { UploadOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
 interface IProps {
+    categories: ICategory[],
     onAdd(product: IProducts): void;
 }
 
@@ -25,7 +26,11 @@ interface IFormInput {
 
 function AddProduct(props: IProps) {
     const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>()
-    const [categories, setCategories] = useState<ICategory[]>([])
+    const [categories, setCategories] = useState<ICategory[]>(props.categories)
+
+    useEffect(() => {
+        setCategories(props.categories)
+    }, [props])
 
     const dummyRequest = ({ onSuccess }: any) => {
         setTimeout(() => {
@@ -45,14 +50,6 @@ function AddProduct(props: IProps) {
 
         return isJpgOrPng && isLt10M;
     };
-
-    const getCate = async (): Promise<void> => {
-        const res = await categoryRequest.getAllCategory()
-        setCategories(res)
-    }
-    useEffect(() => {
-        getCate()
-    }, [])
 
     const onFinish = async (values: IProducts): Promise<void> => {
         const url = values.image

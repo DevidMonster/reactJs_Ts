@@ -3,6 +3,7 @@ import instance from "../instance";
 
 const getAllProduct = async (): Promise<IProducts[]> => {
     const data = await instance.get("/products")
+
     return data.data.data.docs
 }
 

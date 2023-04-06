@@ -9,7 +9,7 @@ function ClientLayout() {
     }
     return (
         <div>
-            <header style={{ display: 'flex', justifyContent: "space-between", padding: "0px 20px" }}>
+            <header style={{ borderBottom: "1px solid black", display: 'flex', justifyContent: "space-between", padding: "0px 20px", alignItems: "center" }}>
                 {localStorage.getItem('token') !== null ? (
                     <Button onClick={handleLogout}>Logout</Button>
                 ) : (
@@ -25,14 +25,14 @@ function ClientLayout() {
                     </ul>
                 </nav>
             </header>
-            <div className="banner">
-
+            <div className="banner" style={{ width: "100%", height: "400px" }}>
+                <img style={{ width: "100%", height: "100%", objectFit: "cover" }} src="https://thumbs.dreamstime.com/z/creating-fashion-t-shirt-banner-mockup-template-creating-fashion-t-shirt-banner-mockup-template-vector-illustration-white-164425877.jpg" alt="banner" />
             </div>
-            <main>
+            <main style={{ minHeight: "100vh" }}>
                 <Outlet />
             </main>
             <footer>
-                DevidMonster
+                <p style={{ textAlign: "center" }}>Copyright © 2000-2023 DevidMonster. All rights reserved.</p>
             </footer>
         </div>
     );
