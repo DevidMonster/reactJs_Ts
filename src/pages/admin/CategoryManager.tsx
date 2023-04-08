@@ -65,21 +65,24 @@ function CategoryManager(props: IProps) {
     return (
         <div className="products">
             <h1>Categories Manager</h1>
-            <Input.Search
-                allowClear
-                enterButton="Search"
-                size="large"
-                placeholder="Search Product by Name"
-                value={searchValue}
-                onChange={handleSearch}
-                style={{ margin: '20px 0' }}
-            />
-            <Table 
+            <div style={{ width: "100%", display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
+                <Input.Search
+                    allowClear
+                    enterButton="Search"
+                    size="large"
+                    width={200}
+                    placeholder="Search Product by Name"
+                    value={searchValue}
+                    onChange={handleSearch}
+                    style={{ margin: '20px 0', width: '30%' }}
+                />
+            </div>
+            <Table
                 pagination={{
                     pageSize: 10
                 }}
-                dataSource={currentData} 
-                columns={columns} 
+                dataSource={currentData}
+                columns={columns}
             />
         </div>
     );

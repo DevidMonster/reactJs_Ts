@@ -24,13 +24,12 @@ function ProductPage(props: IProps) {
                     <Card
                         key={item._id}
                         hoverable
+                        title={item?.name}
+                        extra={<Button onClick={() => navigate("/products/" + item?._id)}>View</Button>}
                         style={{ width: 300 }}
                         cover={<img alt="example" src={item?.image} />}
                     >
-                        <h1>{item?.name}</h1>
                         <Meta title={item?.price + "VNĐ"} description={item?.description} />
-                        <br />
-                        <Button onClick={() => navigate("/products/" + item?._id)}>View</Button>
                     </Card>
                 ))}
                 {/* <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>

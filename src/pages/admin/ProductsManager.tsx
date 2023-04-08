@@ -85,22 +85,24 @@ function ProductsManager(props: IProps) {
     return (
         <div className="products">
             <h1>Products Manager</h1>
-            <Input.Search
-                allowClear
-                enterButton="Search"
-                size="large"
-                placeholder="Search Product by Name"
-                value={searchValue}
-                onChange={handleSearch}
-                style={{ margin: '20px 0' }}
-            />
-            <Table 
-                loading={loading} 
+            <div style={{ width: "100%", display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
+                <Input.Search
+                    allowClear
+                    enterButton="Search"
+                    size="large"
+                    placeholder="Search Product by Name"
+                    value={searchValue}
+                    onChange={handleSearch}
+                    style={{ margin: '20px 0', width: '30%' }}
+                />
+            </div>
+            <Table
+                loading={loading}
                 pagination={{
                     pageSize: 5
-                }} 
-                dataSource={currentData} 
-                columns={columns} 
+                }}
+                dataSource={currentData}
+                columns={columns}
             />
         </div>
     );
