@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, Link } from 'react-router-dom';
 import productRequest from './api/httpRequest/products';
 import AdminLayout from './layouts/AdminLayout';
 import ClientLayout from './layouts/ClientLayout';
@@ -20,7 +20,7 @@ import categoryRequest from './api/httpRequest/category';
 import CategoryManager from './pages/admin/CategoryManager';
 import AddCategory from './pages/admin/AddCategory';
 import UpdateCategory from './pages/admin/UpdateCategory';
-import { message } from 'antd';
+import { Button, Result, message } from 'antd';
 
 function App() {
   const [data, setData] = useState<IProducts[]>([])
@@ -56,8 +56,7 @@ function App() {
   }, [reCall])
 
   const removeItem = async (id: string): Promise<void> => {
-    const verifier = confirm("Are you sure you want to delete this product?")
-    if (verifier) {
+
       await productRequest.deleteProduct(id).then(() => {
         message.success("Delete product successfully")
         navigate("/admin/products")
@@ -65,12 +64,10 @@ function App() {
       }).catch(() => {
         message.error("Update category failed")
       })
-    }
+    
   }
 
   const removeCate = async (id: string): Promise<void> => {
-    const verifier = confirm("Are you sure you want to delete this category?")
-    if (verifier) {
       await categoryRequest.deleteCategory(id).then(() => {
         message.success("Delete category successfully")
         navigate("/admin/categories")
@@ -78,7 +75,7 @@ function App() {
       }).catch(() => {
         message.error("Update category failed")
       })
-    }
+    
   }
 
   const onAdd = async (item: IProducts): Promise<void> => {
@@ -170,6 +167,15 @@ function App() {
             <Route path='update/:id' element={<UpdateCategory categories={categories} onUpdate={onUpdateCate} />} />
           </Route>
         </Route>
+        <Route  element={
+            <Result
+              status="404"
+              title="404"
+              subTitle="Sorry, the page you visited does not exist."
+              extra={<Button type="primary"><Link to={"/"}>Back Home</Link></Button>}
+            />
+          }
+        />
       </Routes>
     </div>
   )

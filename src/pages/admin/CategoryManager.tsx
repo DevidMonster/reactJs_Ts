@@ -1,4 +1,4 @@
-import { Table, Space, Button, Tag, Image, Input } from "antd";
+import { Table, Space, Button, Tag, Image, Input, Popconfirm, message } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ICategory } from "../../types/category";
@@ -40,11 +40,30 @@ function CategoryManager(props: IProps) {
             render: (_: any, record: any) => (
                 <Space size="middle">
                     <Button type="text" danger><Link to={"/admin/categories/update/" + record._id}>Update</Link></Button>
-                    <Button type="primary" danger onClick={() => onRemoveCate(record._id)}>Delete</Button>
+                    <Popconfirm
+                        title="Delete the Category"
+                        description="Are you sure to delete this category?"
+                        onConfirm={(e: any) => confirm(e, record._id)}
+                        onCancel={cancel}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button type="primary" danger>Delete</Button>
+                    </Popconfirm>
                 </Space>
             ),
         },
     ];
+
+    const confirm = (e: React.MouseEvent<HTMLElement>, id: string) => {
+        console.log(e);
+        onRemoveCate(id)
+    };
+      
+    const cancel = (e: React.MouseEvent<HTMLElement>) => {
+        console.log(e);
+        message.error('Denined');
+    };
 
     const handleSearch = (e: any) => {
         setSearchValue(e.target.value);

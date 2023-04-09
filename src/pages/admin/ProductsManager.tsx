@@ -1,4 +1,4 @@
-import { Table, Space, Button, Tag, Image, Input } from "antd";
+import { Table, Space, Button, Tag, Image, Input, Popconfirm, message } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IProducts } from "../../types/products";
@@ -58,11 +58,30 @@ function ProductsManager(props: IProps) {
                 <Space size="middle">
                     <Button danger><Link to={"/products/" + record._id}>View</Link></Button>
                     <Button type="text" danger><Link to={"/admin/products/update/" + record._id}>Update</Link></Button>
-                    <Button type="primary" danger onClick={() => onRemove(record._id)}>Delete</Button>
+                    <Popconfirm
+                        title="Delete the Product"
+                        description="Are you sure to delete this product?"
+                        onConfirm={(e: any) => confirm(e, record._id)}
+                        onCancel={cancel}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button type="primary" danger>Delete</Button>
+                    </Popconfirm>
                 </Space>
             ),
         },
     ];
+
+    const confirm = (e: React.MouseEvent<HTMLElement>, id: string) => {
+        console.log(e);
+        onRemove(id)
+    };
+      
+    const cancel = (e: React.MouseEvent<HTMLElement>) => {
+        console.log(e);
+        message.error('Denined');
+    };
 
     const handleSearch = (e: any) => {
         setSearchValue(e.target.value);
