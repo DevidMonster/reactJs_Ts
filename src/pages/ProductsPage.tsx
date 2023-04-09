@@ -1,24 +1,67 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { IProducts } from '../types/products';
-import { Button, Image, Card } from 'antd';
+import { Button, Segmented, Card, Pagination } from 'antd';
+import { ICategory } from '../types/category';
 
 const { Meta } = Card;
 interface IProps {
-    products: IProducts[]
+    products: IProducts[],
+    categories: ICategory[],
+    onChangeCate: (id: string) => void
 }
 
 function ProductPage(props: IProps) {
-    const { products } = props
+    const { products, categories } = props
+    const [options, setOptions] = useState<any>([])
     const [data, setData] = useState<IProducts[]>(products)
-    useEffect(() => {
-        setData(products)
+    const [pagination, setPagination] = useState({
+        current: 1,
+        pageSize: 4
+    });
 
+    useEffect(() => {
+        const endOffset = pagination.current * pagination.pageSize;
+        const firstOffset = endOffset - pagination.pageSize
+        const currentItems = products.slice(firstOffset, endOffset)
+        setData(currentItems)
+    }, [pagination])
+
+    useEffect(() => {
+        const ot = categories.map(cate => ({
+            label: cate.name,
+            value: cate._id
+        }))
+        setOptions(ot)
+        const endOffset = 1 * pagination.pageSize;
+        const firstOffset = endOffset - pagination.pageSize
+        const currentItems = products.slice(firstOffset, endOffset)
+        setPagination({
+            current: 1,
+            pageSize: 4
+        })
+        setData(currentItems)
     }, [products])
+
     const navigate = useNavigate()
+    const handleGetItemByCate = (value: any) => {       
+        return props.onChangeCate(value)
+    } 
+
+    const handlePageChange = (page: any, pageSize: any) => {
+        console.log(page, pageSize);
+        
+        setPagination({ ...pagination, current: page, pageSize: 4 });
+    };
     return (
         <div className="Product">
             <h1>Products Page</h1>
+            <div style={{display: "flex", justifyContent: 'center', alignItems: 'center', padding: '20px 0'}}>
+                <Segmented
+                    options={[{ label: 'All' }, ...options]}
+                    onChange={handleGetItemByCate}
+                />
+            </div>
             <div style={{ display: 'flex', justifyContent: "space-around", gap: "20px" }}>
                 {data.map(item => (
                     <Card
@@ -38,6 +81,14 @@ function ProductPage(props: IProps) {
                         <h1>{item?.name}</h1>
                         <h3>{item?.price}</h3>
                         <p>{item?.description}</p> */}
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px 0'}}>
+                <Pagination
+                    {...pagination}
+                    total={products.length}
+                    showQuickJumper
+                    onChange={handlePageChange}
+                />
             </div>
         </div>
     )

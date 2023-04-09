@@ -1,5 +1,6 @@
 import { Button } from "antd";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import Search from "../components/Search";
 
 function ClientLayout() {
     const navigate = useNavigate()
@@ -18,6 +19,7 @@ function ClientLayout() {
                         <Button onClick={() => navigate('/register')}>Register</Button>
                     </div>
                 )}
+                <Search/>
                 <nav>
                     <ul style={{ display: 'flex', gap: "10px", justifyContent: 'center', listStyle: "none" }}>
                         <li><Button type="link"><Link to='/'>Home</Link></Button></li>

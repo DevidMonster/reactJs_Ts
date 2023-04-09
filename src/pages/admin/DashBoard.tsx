@@ -12,13 +12,13 @@ function DashBoard() {
             <div style={{ display: 'flex', gap: '20px', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Card
                     hoverable
-                    style={{ flex: 1 }}
+                    style={{ flex: 1, width: '45%' }}
                 >
                     <DonutPlot />
                 </Card>
                 <Card
                     hoverable
-                    style={{ flex: 1 }}
+                    style={{ flex: 1, width: '45%' }}
                 >
                     <ColumnPlot />
                 </Card>

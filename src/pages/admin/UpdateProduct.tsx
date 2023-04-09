@@ -30,7 +30,8 @@ function UpdateProduct(props: IProps) {
     const [product, setProduct] = useState<IProducts>(props.products.find(item => item._id == id)!)
     const [categories, setCategories] = useState<ICategory[]>(props.categories)
     const [fileList, setFileList] = useState<UploadFile[]>([])
-
+    console.log(product);
+    
     const dummyRequest = ({ onSuccess }: any) => {
         setTimeout(() => {
             onSuccess("ok");

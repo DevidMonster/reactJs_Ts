@@ -20,12 +20,24 @@ import categoryRequest from './api/httpRequest/category';
 import CategoryManager from './pages/admin/CategoryManager';
 import AddCategory from './pages/admin/AddCategory';
 import UpdateCategory from './pages/admin/UpdateCategory';
+import { message } from 'antd';
 
 function App() {
   const [data, setData] = useState<IProducts[]>([])
+  const [products, setProducts] = useState<IProducts[]>([])
   const [categories, setCategories] = useState<ICategory[]>([])
   const [reCall, setReCall] = useState(true)
   const navigate = useNavigate()
+
+  const getProductsByCategory = async (id: string) => {
+    if(id) {
+      await categoryRequest.getDetailCategory(id, "?_embed").then(({products}: any) => {
+        setProducts(products)
+      })
+    } else {
+      setProducts(data)
+    }   
+  }
 
   const getCate = async (): Promise<void> => {
     const res = await categoryRequest.getAllCategory()
@@ -35,6 +47,7 @@ function App() {
   const fetchAPI = async (): Promise<void> => {
     const dataResponse = await productRequest.getAllProduct()
     setData(dataResponse)
+    setProducts(dataResponse)
   }
 
   useEffect(() => {
@@ -46,11 +59,11 @@ function App() {
     const verifier = confirm("Are you sure you want to delete this product?")
     if (verifier) {
       await productRequest.deleteProduct(id).then(() => {
-        alert("Delete product successfully")
+        message.success("Delete product successfully")
         navigate("/admin/products")
         setReCall(prev => !prev)
       }).catch(() => {
-        alert("Update category failed")
+        message.error("Update category failed")
       })
     }
   }
@@ -59,51 +72,51 @@ function App() {
     const verifier = confirm("Are you sure you want to delete this category?")
     if (verifier) {
       await categoryRequest.deleteCategory(id).then(() => {
-        alert("Delete category successfully")
+        message.success("Delete category successfully")
         navigate("/admin/categories")
         setReCall(prev => !prev)
       }).catch(() => {
-        alert("Update category failed")
+        message.error("Update category failed")
       })
     }
   }
 
   const onAdd = async (item: IProducts): Promise<void> => {
     await productRequest.postProduct(item).then(() => {
-      alert("Add product successfully")
+      message.success("Add product successfully")
       setReCall(prev => !prev)
       navigate("/admin/products")
     }).catch(() => {
-      alert("Update category failed")
+      message.error("Update category failed")
     })
   }
 
   const onAddCate = async (item: ICategory): Promise<void> => {
     await categoryRequest.postCategory(item).then(() => {
-      alert("Add category successfully")
+      message.success("Add category successfully")
       setReCall(prev => !prev)
       navigate("/admin/categories")
     }).catch(() => {
-      alert("Update category failed")
+      message.error("Update category failed")
     })
   }
   const onUpdate = async (id: string, item: IProducts): Promise<void> => {
     await productRequest.patchProduct(id, item).then(() => {
-      alert("Update product successfully")
+      message.success("Update product successfully")
       setReCall(prev => !prev)
       navigate("/admin/products")
     }).catch(() => {
-      alert("Update category failed")
+      message.error("Update category failed")
     })
   }
 
   const onUpdateCate = async (id: string, item: ICategory): Promise<void> => {
     await categoryRequest.patchCategory(id, item).then(() => {
-      alert("Update category successfully")
+      message.success("Update category successfully")
       setReCall(prev => !prev)
       navigate("/admin/categories")
     }).catch(() => {
-      alert("Update category failed")
+      message.error("Update category failed")
     })
   }
 
@@ -113,7 +126,7 @@ function App() {
         navigate("/login")
       })
       .catch(({ response }) => {
-        alert(response.data.message)
+        message.error(response.data.message)
       })
   }
   const onHandLogin = (user: IUserLogin) => {
@@ -124,11 +137,11 @@ function App() {
 
       const userInfo = response.user
       localStorage.setItem("user", JSON.stringify(userInfo))
-      alert('login success')
+      message.success('login success')
       navigate("/products")
     })
       .catch(({ response }) => {
-        alert(response.data.message)
+        message.error(response.data.message)
       })
   }
 
@@ -140,7 +153,7 @@ function App() {
         <Route path='/' element={<ClientLayout />}>
           <Route index element={<HomePage />} />
           <Route path='products'>
-            <Route index element={<ProductPage products={data} />} />
+            <Route index element={<ProductPage onChangeCate={getProductsByCategory} categories={categories} products={products} />} />
             <Route path=':id' element={<ProductDetailPage products={data} />} />
           </Route>
         </Route>

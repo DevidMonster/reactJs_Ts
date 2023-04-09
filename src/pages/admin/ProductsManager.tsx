@@ -44,7 +44,7 @@ function ProductsManager(props: IProps) {
             title: 'Categories',
             key: 'categories',
             render: (_: any, record: any) => (
-                <Space size="middle">
+                <Space wrap size="middle">
                     {record.categories.map((cate: any) => (
                         <Tag>{cate.name}</Tag>
                     ))}
