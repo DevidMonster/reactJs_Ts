@@ -5,4 +5,5 @@ export interface IProducts {
     image: string,
     description?: string,
     categories: string[];
+    comments?: string[];
 }

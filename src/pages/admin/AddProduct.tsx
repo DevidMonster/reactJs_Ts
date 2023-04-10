@@ -92,6 +92,8 @@ function AddProduct(props: IProps) {
                     {...register('name')}
                     rules={[{ required: true }]}
                     validateStatus={errors.name ? "error" : ""}
+                    normalize={value => value.trim()}
+                    hasFeedback
                 >
                     <Input placeholder="fill name"/>
                 </Form.Item>
@@ -139,11 +141,12 @@ function AddProduct(props: IProps) {
                         message: "Textarea length must be at least 32 characters",
                     },]}
                     validateStatus={errors.description ? "error" : ""}
+                    normalize={value => value.trim()}
                 >
                     <TextArea
                         showCount
                         maxLength={500}
-                        style={{ height: 120, resize: 'none' }}
+                        style={{ height: 120 }}
                         placeholder="description"
                     />
                 </Form.Item>

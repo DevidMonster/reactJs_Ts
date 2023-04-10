@@ -123,6 +123,7 @@ function UpdateProduct(props: IProps) {
                     {...register('name')}
                     rules={[{ required: true }]}
                     validateStatus={errors.name ? "error" : ""}
+                    normalize={value => value.trim()}
                 >
                     <Input placeholder="fill name"/>
                 </Form.Item>
@@ -131,6 +132,7 @@ function UpdateProduct(props: IProps) {
                     {...register('price')}
                     rules={[{ type: 'number', required: true, message: `bạn phải nhập price` }, {type: "number", min: 0, message: "Giá tiền không hợp lệ"}]}
                     validateStatus={errors.price ? "error" : ""}
+                    normalize={value => value.trim()}
                 >
                     <InputNumber placeholder="fill price"/>
 
@@ -145,6 +147,7 @@ function UpdateProduct(props: IProps) {
                         }
                         return e && e.fileList;
                     }}
+                    normalize={value => value.trim()}
                 >
                     <Upload
                         name="image"
@@ -172,11 +175,12 @@ function UpdateProduct(props: IProps) {
                         message: "Textarea length must be at least 32 characters",
                     },]}
                     validateStatus={errors.description ? "error" : ""}
+                    normalize={value => value.trim()}
                 >
                     <TextArea
                         showCount
                         maxLength={500}
-                        style={{ height: 120, resize: 'none' }}
+                        style={{ height: 120 }}
                         placeholder="description"
                     />
                 </Form.Item>

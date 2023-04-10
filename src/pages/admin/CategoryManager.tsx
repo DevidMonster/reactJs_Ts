@@ -44,7 +44,7 @@ function CategoryManager(props: IProps) {
                         title="Delete the Category"
                         description="Are you sure to delete this category?"
                         onConfirm={(e: any) => confirm(e, record._id)}
-                        onCancel={cancel}
+                        onCancel={() => message.error('Denined')}
                         okText="Yes"
                         cancelText="No"
                     >
@@ -58,11 +58,6 @@ function CategoryManager(props: IProps) {
     const confirm = (e: React.MouseEvent<HTMLElement>, id: string) => {
         console.log(e);
         onRemoveCate(id)
-    };
-      
-    const cancel = (e: React.MouseEvent<HTMLElement>) => {
-        console.log(e);
-        message.error('Denined');
     };
 
     const handleSearch = (e: any) => {

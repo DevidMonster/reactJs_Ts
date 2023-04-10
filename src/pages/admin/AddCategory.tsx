@@ -59,6 +59,7 @@ function AddCategory(props: IProps) {
                     {...register('name')}
                     rules={[{ required: true }]}
                     validateStatus={errors.name ? "error" : ""}
+                    normalize={value => value.trim()}
                 >
                     <Input placeholder="fill name"/>
                 </Form.Item>

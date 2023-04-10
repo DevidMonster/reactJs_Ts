@@ -62,7 +62,7 @@ function ProductsManager(props: IProps) {
                         title="Delete the Product"
                         description="Are you sure to delete this product?"
                         onConfirm={(e: any) => confirm(e, record._id)}
-                        onCancel={cancel}
+                        onCancel={() => message.error('Denined')}
                         okText="Yes"
                         cancelText="No"
                     >
@@ -76,11 +76,6 @@ function ProductsManager(props: IProps) {
     const confirm = (e: React.MouseEvent<HTMLElement>, id: string) => {
         console.log(e);
         onRemove(id)
-    };
-      
-    const cancel = (e: React.MouseEvent<HTMLElement>) => {
-        console.log(e);
-        message.error('Denined');
     };
 
     const handleSearch = (e: any) => {
