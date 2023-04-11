@@ -20,8 +20,8 @@ function ProductDetailPage(props: IProps) {
     const currentItem = props.products.find(item => item._id === id)
     const navigate = useNavigate()
     useEffect(() => {
-        currentItem?.categories?.forEach(async (cate) => {
-            await categoryRequest.getDetailCategory(cate._id, "?_embed").then(({products}: any) => {    
+        currentItem?.categories?.forEach(async (cate: any) => {
+            await categoryRequest.getDetailCategory(cate?._id, "?_embed").then(({products}: any) => {    
                 setRelatedItems(products.slice(0, 8))
             })
         })

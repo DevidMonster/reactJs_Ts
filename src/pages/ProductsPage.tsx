@@ -28,11 +28,15 @@ function ProductPage(props: IProps) {
     }, [pagination])
 
     useEffect(() => {
-        const ot = categories.map(cate => ({
-            label: cate.name,
-            value: cate._id
+        const ot = categories?.map(cate => ({
+            label: cate?.name,
+            value: cate?._id
         }))
-        setOptions(ot)
+        console.log(ot);
+        
+        if(ot?.length > 0) {
+            setOptions(ot)
+        }
         const endOffset = 1 * pagination.pageSize;
         const firstOffset = endOffset - pagination.pageSize
         const currentItems = products.slice(firstOffset, endOffset)

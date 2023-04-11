@@ -10,7 +10,7 @@ import { IComments } from "../../types/comment";
 
 interface IProps {
     id: string;
-    currentCmt: IComments[];
+    currentCmt: string[] | IComments[];
 }
 
         
